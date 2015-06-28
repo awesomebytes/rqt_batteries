@@ -2,7 +2,9 @@ rqt plugin dashboard for showing battery status.
 
 ![Screenshot of the batteries plugin working](https://raw.githubusercontent.com/pal-robotics/rqt_batteries/master/images/rqt_batteries_ss.png)
 
-You must set in the parameter server
+Simple way, you can either publish to the topic: `/battery_status` of type power_msgs/BatteryStatus (Currently at: https://github.com/awesomebytes/power_msgs).
+
+Or you can set in the parameter server
 which topics to listen to and it will
 do the magic for you.
 
