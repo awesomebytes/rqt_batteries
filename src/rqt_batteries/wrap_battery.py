@@ -21,15 +21,13 @@
 # Authors:
 #   * Sammy Pfeiffer
 
-from rqt_robot_dashboard.widgets import BatteryDashWidget
-
+from rqt_robot_dashboard.battery_dash_widget import BatteryDashWidget
 
 class WrappedBattery(BatteryDashWidget):
     """
     Dashboard widget to display batteries state.
     """
-    #TODO When nonbutton Dashboard objects are available rebase this widget
-    def __init__(self, context, name):
+    def __init__(self, context, name="Battery", callback_on_double_click=None):
         """
         :param context: the plugin context
         :type context: qt_gui.plugin.Plugin
@@ -49,6 +47,7 @@ class WrappedBattery(BatteryDashWidget):
         icon_paths = []
         icon_paths.append(['rqt_batteries', 'images'])
         self._wrapped_battery_name = name
+        self._callback_on_double_click = callback_on_double_click
         super(WrappedBattery, self).__init__(name=name,
                                                   icons=icons, charge_icons=charge_icons,
                                                   icon_paths=icon_paths,
@@ -57,11 +56,20 @@ class WrappedBattery(BatteryDashWidget):
 
         self.update_perc(0)
 
-    def set_power_state_perc(self, percentage, charging):
+    def set_power_state_perc(self, percentage, charging, name=None, tooltip_text=None):
         """
         """
+        if name is not None:
+            self._name = name
         self.update_perc(percentage)
-        self.update_time(percentage) # + remaining
+        if tooltip_text:
+            self.setToolTip(tooltip_text)
         self.set_charging(charging)
 
 
+    def mouseDoubleClickEvent(self, event):
+        """
+        Callback when there is a double click on the icon
+        """
+        if self._callback_on_double_click:
+            self._callback_on_double_click()
